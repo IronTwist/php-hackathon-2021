@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
-
+        <link rel="stylesheet" href="css/global.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
         {# Run `composer require symfony/webpack-encore-bundle`
@@ -26,20 +26,36 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       
-      {# {% if is_granted('IS_AUTHENTICATED_FULLY') %} #}
+      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+      
       <li class="nav-item">
         <a class="nav-link" href="{{ path("programme.index") }}">Programme</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ path("booking", {name: 'Radu'}) }}">Booking</a>
+        <a class="nav-link" href="{{ path("booking.index") }}">My Bookings</a>
       </li>
       <li class="nav-item">
         {# <a class="nav-link" href="{{ path("post.create") }}">Add post</a> #}
       </li>
+
+      {% endif %}
+
+      {% if is_granted('IS_ANONYMOUS') %}
+
       <li class="nav-item float-right">
-        {# <a class="nav-link" href="{{ path("app_logout") }}">Logout</a> #}
+        <a class="nav-link" href="{{ path("register") }}">Register</a>
       </li>
+      
+      <li class="nav-item float-right">
+        <a class="nav-link" href="{{ path("app_login") }}">Login</a>
+      </li>
+      {% endif %}
     </ul>
+    {% if app.user %}
+        <div class="mb-3">
+            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+        </div>
+    {% endif %}
     {# {% endif %} #}
   </div>
 </nav>

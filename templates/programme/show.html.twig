@@ -1,0 +1,13 @@
+{% extends("base.html.twig") %}
+
+{% block body %}
+    {{ programme.name }}
+
+    <p class="displayProgrammeData">
+        Room : {{ programme.room }} </br>
+        Maximum participants {{ programme.maxParticipants }} </br>
+        Start date: {{ programme.startProgramme|date("m/d/Y H:i:s") }} </br>
+        End date: {{ programme.endProgramme|date("m/d/Y H:i:s") }}
+    </p>
+    <a style="border: 1px solid green; padding:3px; background-color: orange" href="{{ path("booking.create", {id: programme.id}) }}">Book this programme</a>
+{% endblock %} 

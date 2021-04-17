@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProgrammeRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constrainsts as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=ProgrammeRepository::class)
@@ -21,7 +22,7 @@ class Programme
      * @ORM\Column(type="string", length=255)
      */
     private $name;
-
+    
     /**
      * @ORM\Column(type="integer")
      */
@@ -84,7 +85,7 @@ class Programme
     }
 
     public function getStartProgramme(): ?\DateTimeInterface
-    {
+    {   
         return $this->start_programme;
     }
 

@@ -1,9 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h2>List of programmes</h2>
 
-    <pre>
-        {{ dump(programmes) }}
-    </pre>}}
+    {% for message in app.flashes('createSucces') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('deleteSucces') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <td>ID</td>
+                <td>Programme Name</td>
+                <td>Room</td>
+                <td>Max Participants</td>
+                <td>Start Date/time</td>
+                <td>End Date/time</td>
+                <td>Action</td>
+            </tr>
+        </thead>
+        <tbody>
+        {% for programme in programmes %}
+            <tr>
+                <td>{{ programme.id }}</td>
+                <td>
+                    <a href="{{ path("programme.show", {id: programme.id}) }}">{{ programme.name }}</a>
+                </td>
+
+                <td>
+                    {{ programme.room }}
+                </td>
+                <td>
+                    {{ programme.maxParticipants }}
+                </td>
+                <td>
+                    {{ programme.startProgramme|date("m/d/Y H:i:s") }}
+                </td>
+                <td>
+                    {{ programme.endProgramme|date("m/d/Y H:i:s") }}
+                </td>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                <td>
+                    <a class="text-danger" href="{{ path("programme.delete", {id: programme.id}) }}">Delete</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table> 
+        <div>
+            <a href="{{ path("programme.create") }}">Add programme</a>
+        </div>
 
 {% endblock %}
