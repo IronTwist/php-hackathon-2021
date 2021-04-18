@@ -19,7 +19,18 @@ class ProgrammeRepository extends ServiceEntityRepository
         parent::__construct($registry, Programme::class);
     }
 
-    
+    public function findAllDatesOnRoom($roomNumber){
+        return $this->createQueryBuilder('p')
+            ->select('p.id')
+            ->addSelect('p.start_programme')
+            ->addSelect('p.end_programme')
+            ->andWhere('p.room = :val')
+            ->setParameter('val', $roomNumber)
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     // /**
     //  * @return Programme[] Returns an array of Programme objects

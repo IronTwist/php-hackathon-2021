@@ -53,12 +53,19 @@ class BookingController extends AbstractController
      * @return Response
      */
     public function show(BookingRepository $bookingRepository, ProgrammeRepository $programmeRepository){
+        $message = "";
+        $empty = false;
 
         $user = $this->getUser();
         $userId = $user->getId();
 
         $bookingsIds = $bookingRepository->findUserBookings($userId);
        
+        if(is_null($bookingsIds) || empty($bookingsIds)){
+            $message = "You don't have any booking!";
+            $empty = true;
+        }
+
         $myProgrammes = [];
 
         foreach($bookingsIds as $bId){
@@ -72,7 +79,9 @@ class BookingController extends AbstractController
         // dump($myProgrammes);
 
         return $this->render("booking/show.html.twig", [
-            'myProgrammes' => $myProgrammes
+            'myProgrammes' => $myProgrammes,
+            'message' => $message,
+            'empty' => $empty
         ]);
     }
 }

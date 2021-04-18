@@ -5,7 +5,10 @@
         <h1>My Bookings</h1>
     <div style="margin: 10px 80px;">
         You are training in: </br>
-
+        {% if empty == true %}
+            {{ message }}
+        {% endif %}
+        
         {% set size = myProgrammes | length %}
 
         {% for i in 0..size-1 %}

@@ -32,13 +32,15 @@ For each of the following functionalities, please tick the box if you implemente
 
 [x] Brew coffee \
 [x] Create programme \ First check if user is loged as admin to display create button, if that is true admin can press "Add programme button", another route(/programme/create) is displayed where 5 fields are required to fill(name, room, max participants, start programme, end programme) and "Save" button, all fields are required is they are filled corectly new programm is added and I am redirected to a route(/programme) and display the message "New programme creted!".
+\
 [x] Delete programme \ Same, check if user is logged as admin, if that is true in the display table is shown Action column with "Delete" button, if button is pressed the route(/delete/{id}) is acces with the id of the programme, where function remove is applied(search for programme with the following id in Programme repository and remove it from database), after that user is redirected to route(/programme) and display the message "Programme removed!".
+\
 [x] Book a programme \ To book a program user have to click on "Programme name" which he wants, after that is displayed route(/show/{id}) with selected programme id, in this place we show all data about programme, olso display the remaining places and a button to book "Book this programme" (if remaining places are 0 i don't display the button to "Book this programme" and show the message "Sorry, this programme is full!", olso, if user hit the button to subscribe every time he visit that programme the message "You are already subscribed!" is displayed). OK so if user hit the "Book this programme" button" the route(/booking/create/{id}) is selected where function for that route is creating adding a new row with reltion between userId and programmeId.
 
 ##### Business rules
 Please highlight all the validations and mechanisms you identified as necessary in order to avoid inconsistent states and apply the business logic in your application.
 
-- most validation is by frontend check generate by form builder, and display of show action button (e.g. when if programme is full of participants then i dont display the "Book this programme" programme).
+- most validation is by frontend check generate by form builder, and display of show action button (e.g. if programme is full of participants then i dont display the "Book this programme" programme).
 
 ##### 3rd party libraries (if applicable)
 Please give a brief review of the 3rd party libraries you used and how/ why you've integrated them into your project.
@@ -93,7 +95,7 @@ In this section, please let us know what is your opinion about this experience a
 
 8. Is there anything you would like to improve to your current implementation?
 
-    - Validating datetime intersection. When adding new programme to database to save a list with time interval of a required Room (ex: Room 1), check and compare if datetime intersect with new datetime given, if there is no intersection programme is saved else trow a new error. I still have to learn how to use try{}catch() with this framework using routes.
+    - Validating datetime intersection. When adding new programme to database to save a list with time interval of a required Room (ex: Room 1), check and compare if datetime intersect with new datetime given, if there is no intersection programme is saved else trow a new error. I still have to learn how to use try{}catch() with this framework using ProgrammeService.
     - Ability for admin to view and delete bookings of other users. Maybe a dropdown list with users, and everytime a user is selected it will display his bookings with a button "Delete" next to programme name.
 
 9.  What would you change regarding this anti hackathon?

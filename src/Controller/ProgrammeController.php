@@ -6,6 +6,7 @@ use App\Entity\Programme;
 use App\Form\ProgrammeType;
 use App\Repository\BookingRepository;
 use App\Repository\ProgrammeRepository;
+use App\Service\ProgrammeService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,8 +30,8 @@ class ProgrammeController extends AbstractController
      * @param Request $request
      * @return Response
      */
-    public function create(Request $request){
-
+    public function create(Request $request, ProgrammeRepository $programmeRepository, ProgrammeService $programmeService){
+        
         $programme = new Programme();
         
         $form = $this->createForm(ProgrammeType::class, $programme);
@@ -40,6 +41,18 @@ class ProgrammeController extends AbstractController
         $form->getErrors();
         
         if ($form->isSubmitted() && $form->isValid()) { 
+
+                //For start/end DateTime validation
+                $data = $form->getData();
+                $getRoomNumber = $data->getRoom();
+                
+                /** get list of all datetime records of a choosen room*/
+                $datesListByRoom = $programmeRepository->findAllDatesOnRoom($getRoomNumber);
+                
+         
+                $programmeService->checkDateTimeIntersection($datesListByRoom, $data->getStartProgramme(), $data->getEndProgramme());
+
+
             $entityManager = $this->getDoctrine()->getManager();
 
             $entityManager->persist($programme);
@@ -107,6 +120,7 @@ class ProgrammeController extends AbstractController
         foreach($programmeForCount as $programmefound){
             $countOcupied++;
         }
+        //Count places left ***********************************END
 
         return $this->render("programme/show.html.twig", [
             'programme' => $programmeShow,
@@ -114,4 +128,5 @@ class ProgrammeController extends AbstractController
             'ocupiedWithParticipants' => $countOcupied
         ]);
     }
+
 }
