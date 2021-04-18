@@ -19,6 +19,23 @@ class BookingRepository extends ServiceEntityRepository
         parent::__construct($registry, Booking::class);
     }
 
+    public function findUserBookings($id){
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('b.programmeId')
+            ->where('b.userId = :val')
+            ->setParameter('val', $id);
+        return $qb->getQuery()->getResult();
+    }
+
+    public function findAllByProgrammeId($programmeId){
+        
+        $qb = $this->createQueryBuilder('b');
+        $qb->select('b.id')
+            ->where('b.programmeId = :val')
+            ->setParameter('val', $programmeId);
+        return $qb->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Booking[] Returns an array of Booking objects
     //  */

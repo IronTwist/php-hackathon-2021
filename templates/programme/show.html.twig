@@ -1,13 +1,33 @@
 {% extends("base.html.twig") %}
 
 {% block body %}
-    {{ programme.name }}
-
+<div style="margin: 10px 40px">
+    <b>{{ programme.name }}</b>
+    {% set ocupied = programme.maxParticipants - ocupiedWithParticipants %}
     <p class="displayProgrammeData">
         Room : {{ programme.room }} </br>
         Maximum participants {{ programme.maxParticipants }} </br>
-        Start date: {{ programme.startProgramme|date("m/d/Y H:i:s") }} </br>
-        End date: {{ programme.endProgramme|date("m/d/Y H:i:s") }}
+        Left empty: {{ ocupied }} </br>
+        Data: {{ programme.startProgramme|date("m/d/Y") }} Time: {{ programme.startProgramme|date("H:i") }} - {{ programme.endProgramme|date("H:i") }} 
     </p>
-    <a style="border: 1px solid green; padding:3px; background-color: orange" href="{{ path("booking.create", {id: programme.id}) }}">Book this programme</a>
+    {% set found = false %}
+    {% set size = myProgrammes | length %}
+
+    {% for i in 0..size-1 %}
+        {% if myProgrammes[i].id == programme.id %}
+            {% set found = true %}
+        {% endif %}
+    {% endfor %}
+
+    {% if found != true %}
+        {% if ocupied > 0 %}
+        <a style="border: 1px solid green; padding:3px; background-color: orange" href="{{ path("booking.create", {id: programme.id}) }}">Book this programme</a>
+        {% else %}
+            <b>Sorry, this programme is full!</b>
+        {% endif %}
+    {% endif %}
+    {% if found != false %}
+        <b>You are already subscribed</b>
+    {% endif %}    
+</div>
 {% endblock %} 

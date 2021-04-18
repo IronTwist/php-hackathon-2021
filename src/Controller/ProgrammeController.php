@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Programme;
 use App\Form\ProgrammeType;
+use App\Repository\BookingRepository;
 use App\Repository\ProgrammeRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,17 +74,44 @@ class ProgrammeController extends AbstractController
         return $this->redirect($this->generateUrl("programme.index"));
     }
 
-    
     /** 
      * @Route("/show/{id}", name="show")
      * @return Response
      */
-    public function show($id, ProgrammeRepository $programmeRepository){
+    public function show($id, ProgrammeRepository $programmeRepository, BookingRepository $bookingRepository){
+        $selectedProgrameId = $id;
 
         $programmeShow = $programmeRepository->find($id);
 
+        //Find my registered programmes************************START
+        $user = $this->getUser();
+        $userId = $user->getId();
+
+        $bookingsIds = $bookingRepository->findUserBookings($userId);
+       
+        $myProgrammes = [];
+
+        foreach($bookingsIds as $bId){
+            
+            $id = $bId['programmeId'];
+
+            array_push($myProgrammes,  $programmeRepository->find($id));
+            
+        }
+        //Find my registered programmes************************END
+
+        //Count places left ***********************************START
+        $countOcupied = 0;
+        $programmeForCount = $bookingRepository->findAllByProgrammeId($selectedProgrameId);
+        
+        foreach($programmeForCount as $programmefound){
+            $countOcupied++;
+        }
+
         return $this->render("programme/show.html.twig", [
-            'programme' => $programmeShow
+            'programme' => $programmeShow,
+            'myProgrammes' => $myProgrammes,
+            'ocupiedWithParticipants' => $countOcupied
         ]);
     }
 }

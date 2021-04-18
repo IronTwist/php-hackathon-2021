@@ -3,8 +3,9 @@
 {% block title %}Log in!{% endblock %}
 
 {% block body %}
- Welcome to Health Center </br></br>
- <div class="login">
+<div class="login">
+ <h3>Welcome to Health Center</h3> </br></br>
+ 
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>

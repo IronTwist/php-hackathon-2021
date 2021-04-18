@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Booking;
+use App\Repository\BookingRepository;
 use App\Repository\ProgrammeRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -34,7 +35,7 @@ class BookingController extends AbstractController
         
         $booking->setUserId($userId);
         $booking->setProgrammeId($programmeId);
-
+        
         $entityManager = $this->getDoctrine()->getManager();
 
         $entityManager->persist($booking);
@@ -42,7 +43,36 @@ class BookingController extends AbstractController
 
         
         return $this->render("booking/index.html.twig", [
+            'programme' => $programme,
             'booking' => $booking
+        ]);
+    }
+
+     /** 
+     * @Route("/show", name="show")
+     * @return Response
+     */
+    public function show(BookingRepository $bookingRepository, ProgrammeRepository $programmeRepository){
+
+        $user = $this->getUser();
+        $userId = $user->getId();
+
+        $bookingsIds = $bookingRepository->findUserBookings($userId);
+       
+        $myProgrammes = [];
+
+        foreach($bookingsIds as $bId){
+            
+            $id = $bId['programmeId'];
+
+            array_push($myProgrammes,  $programmeRepository->find($id));
+            
+        }
+
+        // dump($myProgrammes);
+
+        return $this->render("booking/show.html.twig", [
+            'myProgrammes' => $myProgrammes
         ]);
     }
 }

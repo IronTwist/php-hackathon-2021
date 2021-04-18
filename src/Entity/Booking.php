@@ -34,24 +34,24 @@ class Booking
 
     public function getUserId(): ?int
     {
-        return $this->user;
+        return $this->userId;
     }
 
     public function setUserId(int $user): self
     {
-        $this->user = $user;
+        $this->userId = $user;
 
         return $this;
     }
 
     public function getProgrammeId(): ?int
     {
-        return $this->programme;
+        return $this->programmeId;
     }
 
     public function setProgrammeId(int $programme): self
     {
-        $this->programme = $programme;
+        $this->programmeId = $programme;
 
         return $this;
     }

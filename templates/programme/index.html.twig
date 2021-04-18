@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <div style="margin: 10px 30px">
     <h2>List of programmes</h2>
 
     {% for message in app.flashes('createSucces') %}
@@ -9,17 +10,19 @@
     {% for message in app.flashes('deleteSucces') %}
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
-
+    
     <table class="table table-striped">
         <thead>
             <tr>
-                <td>ID</td>
-                <td>Programme Name</td>
-                <td>Room</td>
-                <td>Max Participants</td>
-                <td>Start Date/time</td>
-                <td>End Date/time</td>
-                <td>Action</td>
+                <th>ID</th>
+                <th>Programme Name</th>
+                <th>Room</th>
+                <th>Max Participants</th>
+                <th>Start Date/time</th>
+                <th>End Date/time</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Action</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>
@@ -29,7 +32,6 @@
                 <td>
                     <a href="{{ path("programme.show", {id: programme.id}) }}">{{ programme.name }}</a>
                 </td>
-
                 <td>
                     {{ programme.room }}
                 </td>
@@ -42,7 +44,7 @@
                 <td>
                     {{ programme.endProgramme|date("m/d/Y H:i:s") }}
                 </td>
-                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>
                     <a class="text-danger" href="{{ path("programme.delete", {id: programme.id}) }}">Delete</a>
                 </td>
@@ -51,8 +53,13 @@
             {% endfor %}
         </tbody>
     </table> 
+    {% if is_granted('ROLE_ADMIN') %}
         <div>
-            <a href="{{ path("programme.create") }}">Add programme</a>
+            <a style="color: black; border: 1px solid black; padding:3px; background-color: #ADD8E6;" href="{{ path("programme.create") }}">Add programme</a>
         </div>
+    {% endif %}
+    
+        
+    </div>    
 
 {% endblock %}

@@ -32,7 +32,7 @@
         <a class="nav-link" href="{{ path("programme.index") }}">Programme</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ path("booking.index") }}">My Bookings</a>
+        <a class="nav-link" href="{{ path("booking.show") }}">My Bookings</a>
       </li>
       <li class="nav-item">
         {# <a class="nav-link" href="{{ path("post.create") }}">Add post</a> #}
@@ -53,7 +53,7 @@
     </ul>
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            You are logged in as {{ app.user.username|upper }}, <a href="{{ path('app_logout') }}">Logout</a>
         </div>
     {% endif %}
     {# {% endif %} #}
