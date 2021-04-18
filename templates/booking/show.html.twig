@@ -1,15 +1,15 @@
 {% extends("base.html.twig") %}
 
 {% block body %}
-<div class="myBookings">
-    <h1>My Bookings</h1>
- 
-    You are training in: </br>
+    
+        <h1>My Bookings</h1>
+    <div style="margin: 10px 80px;">
+        You are training in: </br>
 
-   {% set size = myProgrammes | length %}
+        {% set size = myProgrammes | length %}
 
-    {% for i in 0..size-1 %}
-        <a href="{{ path("programme.show", {id: myProgrammes[i].id}) }}">{{myProgrammes[i].name}}</a></br>
-    {% endfor %}
+        {% for i in 0..size-1 %}
+            <a href="{{ path("programme.show", {id: myProgrammes[i].id}) }}">{{myProgrammes[i].name}}</a></br>
+        {% endfor %}
     </div>
 {% endblock %} 

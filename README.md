@@ -14,46 +14,91 @@ You have estimated it takes 4 weeks to build this solution. You have 2 days. Goo
 ## Technical documentation
 ### Data and Domain model
 In this section, please describe the main entities you managed to identify, the relationships between them and how you mapped them in the database.
+
+I identified the following entityes: User, Programme and Booking
+    -User entity is for security(auth system) and to identifie current logged user to be able to edit(add, delete) programmes(Programme entity) for admin user, and to book programmes (Booking entity relation betweeen user and programmes) for simple users.
+
+    -Booking is use just to relate between UserId and ProgrammeId
+    -Programme is to manage programmes (crete, read and delete)
+
 ### Application architecture
 In this section, please provide a brief overview of the design of your application and highlight the main components and the interaction between them.
+
+All project i made is with Symfony framework, authentification where I register new user and login the user, connection and relation with database (MySql) using Doctrine, after user is logged in he has acces to "Programmes" and "My Bookigs". In "Programmes" user can see al the registered programmes, and he can choose one to view and book. Admin user has the ability to Add new programme and to delete. "My Bookings is to view the programmes you are subscribed to".
+
 ###  Implementation
 ##### Functionalities
 For each of the following functionalities, please tick the box if you implemented it and describe its input and output in your application:
 
 [x] Brew coffee \
-[ ] Create programme \
-[ ] Delete programme \
-[ ] Book a programme 
+[x] Create programme \ First check if user is loged as admin to display create button, if that is true admin can press "Add programme button", another route(/programme/create) is displayed where 5 fields are required to fill(name, room, max participants, start programme, end programme) and "Save" button, all fields are required is they are filled corectly new programm is added and I am redirected to a route(/programme) and display the message "New programme creted!".
+[x] Delete programme \ Same, check if user is logged as admin, if that is true in the display table is shown Action column with "Delete" button, if button is pressed the route(/delete/{id}) is acces with the id of the programme, where function remove is applied(search for programme with the following id in Programme repository and remove it from database), after that user is redirected to route(/programme) and display the message "Programme removed!".
+[x] Book a programme \ To book a program user have to click on "Programme name" which he wants, after that is displayed route(/show/{id}) with selected programme id, in this place we show all data about programme, olso display the remaining places and a button to book "Book this programme" (if remaining places are 0 i don't display the button to "Book this programme" and show the message "Sorry, this programme is full!", olso, if user hit the button to subscribe every time he visit that programme the message "You are already subscribed!" is displayed). OK so if user hit the "Book this programme" button" the route(/booking/create/{id}) is selected where function for that route is creating adding a new row with reltion between userId and programmeId.
 
 ##### Business rules
 Please highlight all the validations and mechanisms you identified as necessary in order to avoid inconsistent states and apply the business logic in your application.
 
+- most validation is by frontend check generate by form builder, and display of show action button (e.g. when if programme is full of participants then i dont display the "Book this programme" programme).
+
 ##### 3rd party libraries (if applicable)
 Please give a brief review of the 3rd party libraries you used and how/ why you've integrated them into your project.
+-Bootstrap (for design) (just added in base.html.twig).
 
 ##### Environment
 Please fill in the following table with the technologies you used in order to work at your application. Feel free to add more rows if you want us to know about anything else you used.
 | Name | Choice |
 | ------ | ------ |
-| Operating system (OS) | e.g. Ubuntu 20.04 |
-| Database  | e.g. MySQL 8.0|
-| Web server| e.g. Nginx |
-| PHP | e.g. 7.0 |
-| IDE | e.g. PhpStorm |
+| Operating system (OS) | Windows 10 |
+| Database  | e.g. MySQL |
+| Web server| e.g. XAMP -> Apache / Symfony server |
+| PHP |  8.0.1  |
+| IDE | Visual Studio Code |
+| Framework | Symfony 5.2.6 |
 
 ### Testing
-In this section, please list the steps and/ or tools you've used in order to test the behaviour of your solution.
+     -commandLine to see the routes (php bin/console debug:routes);
+     -using dump() (composer require dump) to display Request/Response;
+     -Profiler (composer required profiler), to see better the Request/Response interaction and many more (current user logged in)
 
 ## Feedback
 In this section, please let us know what is your opinion about this experience and how we can improve it:
 
 1. Have you ever been involved in a similar experience? If so, how was this one different?
-2. Do you think this type of selection process is suitable for you?
-3. What's your opinion about the complexity of the requirements?
-4. What did you enjoy the most?
-5. What was the most challenging part of this anti hackathon?
-6. Do you think the time limit was suitable for the requirements?
-7. Did you find the resources you were sent on your email useful?
-8. Is there anything you would like to improve to your current implementation?
-9. What would you change regarding this anti hackathon?
+   
+   It's my first time in a Hackaton.
 
+2. Do you think this type of selection process is suitable for you?
+   
+    Yes I like and I learned alot on my own.
+
+3. What's your opinion about the complexity of the requirements?
+   
+   It's quite commplex because is my first time using Symfony framework, I wanted to give a try with the framework, I still have alot to learn about this framework, because everything is different, for example i'm not sure yet how to manage sessions because is easier with pure php (session_start(), $_SESSION['user_name'] = 'razvan'), even user controlle is easer just check if session is set. But I like that "twig template code" to display data with if is_granted("IS_AUTHENTICATED_FULLY") style.
+
+4. What did you enjoy the most?
+   
+    Learning new stuff about Symfony framework.
+
+5. What was the most challenging part of this anti hackathon?
+   
+    Using validation with Symfony
+
+6. Do you think the time limit was suitable for the requirements?
+   
+   For a more advanced programmer is more than enough. For me learning how to use validation with twig and ORM is challenging and time wasting.
+
+7. Did you find the resources you were sent on your email useful?
+
+    Yes.
+
+8. Is there anything you would like to improve to your current implementation?
+
+    - Validating datetime intersection. When adding new programme to database to save a list with time interval of a required Room (ex: Room 1), check and compare if datetime intersect with new datetime given, if there is no intersection programme is saved else trow a new error. I still have to learn how to use try{}catch() with this framework using routes.
+    - Ability for admin to view and delete bookings of other users. Maybe a dropdown list with users, and everytime a user is selected it will display his bookings with a button "Delete" next to programme name.
+
+9.  What would you change regarding this anti hackathon?
+
+    Nothing, it was quite fun and challange.
+
+I'll put some printscreen of the finished app in a "Preview Project" folder.
+                                Thank You, Razvan.

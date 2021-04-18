@@ -1,3 +1,4 @@
+
 .login{
     margin: 10px auto;
     width: 300px;
@@ -16,6 +17,6 @@
     font-size: 14px;
 }
 
-.myBookings{
-    margin: 10px 40px;
+.book{
+    margin-left: 30px;
 }
