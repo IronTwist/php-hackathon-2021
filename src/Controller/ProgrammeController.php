@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Booking;
 use App\Entity\Programme;
 use App\Form\ProgrammeType;
 use App\Repository\BookingRepository;
 use App\Repository\ProgrammeRepository;
 use App\Service\ProgrammeService;
+use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Comparator\DateComparator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -49,17 +52,43 @@ class ProgrammeController extends AbstractController
                 /** get list of all datetime records of a choosen room*/
                 $datesListByRoom = $programmeRepository->findAllDatesOnRoom($getRoomNumber);
                 
-         
-                $programmeService->checkDateTimeIntersection($datesListByRoom, $data->getStartProgramme(), $data->getEndProgramme());
+                $error = 0;
 
+                foreach($datesListByRoom as $dateRoom){
+                    // dump($dateRoom["end_programme"]); die;
+                    
+                    $start = $dateRoom["start_programme"];
+                    $end = $dateRoom["end_programme"];
+                    $checkNewStartDate = $data->getStartProgramme();
+                    $checkNewEndDate = $data->getEndProgramme();
+
+                    if($start <= $checkNewStartDate  && $checkNewStartDate <= $end){
+                        $error = 1;
+                    }
+
+                    if($start <= $checkNewEndDate  && $checkNewEndDate <= $end){
+                        $error = 1;
+                    }
+
+                    if($checkNewStartDate > $checkNewEndDate){
+                        $error = 1;
+                    }
+                }
+
+                // $programmeService->checkDateTimeIntersection($datesListByRoom, $data->getStartProgramme(), $data->getEndProgramme());
 
             $entityManager = $this->getDoctrine()->getManager();
+            
+            if ($error == 0) {
+                $entityManager->persist($programme);
+                $entityManager->flush();
 
-            $entityManager->persist($programme);
-            $entityManager->flush();
+                $this->addFlash("createSucces","New programme creted!");
+            }else{
+                $this->addFlash("createErrorDatetime","Check if dates are not intersecting other programme and try again!");
+            }
 
-            $this->addFlash("createSucces","New programme creted!");
-
+    
             return $this->redirect($this->generateUrl("programme.index"));
         }
 
@@ -72,11 +101,18 @@ class ProgrammeController extends AbstractController
      * @Route("/delete/{id}", name="delete")
      * @return Response
      */
-    public function remove($id, ProgrammeRepository $programmeRepository){
+    public function remove($id, ProgrammeRepository $programmeRepository, BookingRepository $bookingRepository){
         
         $programmeToDelete = $programmeRepository->find($id);
+        $bookings = $bookingRepository->findAll();
 
         $entityManager = $this->getDoctrine()->getManager();
+
+        foreach($bookings as $booking){
+            if($booking->getProgrammeId() == $programmeToDelete->getId()){
+                $entityManager->remove($booking);
+            }
+        }
 
         $entityManager->remove($programmeToDelete);
 

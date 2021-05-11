@@ -10,6 +10,10 @@
     {% for message in app.flashes('deleteSucces') %}
         <div class="alert alert-success">{{ message }}</div>
     {% endfor %}
+
+    {% for message in app.flashes('createErrorDatetime') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
     
     <table class="table table-striped">
         <thead>

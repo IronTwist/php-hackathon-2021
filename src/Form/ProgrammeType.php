@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 
 class ProgrammeType extends AbstractType
 {
@@ -24,7 +25,11 @@ class ProgrammeType extends AbstractType
                     'Room 5' => 5,
                 ]
             ])
-            ->add('max_participants')
+            ->add('max_participants', IntegerType::class, [
+                'attr' => [
+                    'min' => 1
+                ]
+            ])
             ->add('start_programme')
             ->add('end_programme')
             ->add('save', SubmitType::class, [
